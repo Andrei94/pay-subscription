@@ -14,7 +14,13 @@ public class PaySubscriptionFunction extends FunctionInitializer implements Func
 
     @Override
     public Boolean apply(PaySubscription msg) {
-        PaymentMethodRequest paymentMethodRequest = new PaymentMethodRequest().customerId(msg.getCustomerId()).paymentMethodNonce(msg.getPaymentNonce());
+        PaymentMethodRequest paymentMethodRequest = new PaymentMethodRequest()
+                .customerId(msg.getCustomerId())
+                .paymentMethodNonce(msg.getPaymentNonce())
+                .options()
+                .verifyCard(true)
+                .done();
+        gateway.customer().search(new CustomerSearchRequest().id().is(msg.getCustomerId())).getFirst();
         Result<? extends PaymentMethod> paymentMethod = gateway.paymentMethod().create(paymentMethodRequest);
         Result<Subscription> subscriptionResult = gateway.subscription().create(new SubscriptionRequest()
                 .planId(msg.getPlanId())
