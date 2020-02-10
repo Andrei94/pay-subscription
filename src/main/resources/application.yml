@@ -1,3 +1,13 @@
 micronaut:
   function:
     name: pay-subscription
+  server:
+    port: 8082
+    cors:
+      enabled: true
+      configurations:
+        web:
+          allowedOrigins:
+            - http://localhost:4200
+          allowedMethods:
+            - POST

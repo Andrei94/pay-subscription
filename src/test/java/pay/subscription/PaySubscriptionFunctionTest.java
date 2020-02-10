@@ -13,9 +13,9 @@ public class PaySubscriptionFunctionTest {
     PaySubscriptionClient client;
 
     @Test
-    public void testFunction() throws Exception {
+    public void testFunction() {
     	PaySubscription body = new PaySubscription();
-    	body.setName("pay-subscription");
-        assertEquals("pay-subscription", client.apply(body).blockingGet().getName());
+    	body.setPaymentNonce("pay-subscription");
+        assertEquals("pay-subscription", client.apply(body).blockingGet().getPaymentNonce());
     }
 }

@@ -1,10 +1,19 @@
 package pay.subscription;
 
+import com.braintreegateway.BraintreeGateway;
 import io.micronaut.runtime.Micronaut;
 
-public class Application {
+import java.io.File;
 
-    public static void main(String[] args) {
-        Micronaut.run(Application.class);
-    }
+public class Application {
+	static BraintreeGateway gateway;
+
+	public static void main(String[] args) {
+		File file = new File("gateway.properties");
+		if(file.exists())
+			gateway = BraintreeGatewayFactory.fromConfigFile(file);
+		else
+			gateway = BraintreeGatewayFactory.fromConfigMapping(System.getenv());
+		Micronaut.run(Application.class);
+	}
 }
