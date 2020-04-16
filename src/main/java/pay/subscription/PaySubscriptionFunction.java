@@ -10,7 +10,7 @@ import java.util.function.Function;
 
 @FunctionBean("pay-subscription")
 public class PaySubscriptionFunction extends FunctionInitializer implements Function<PaySubscription, Boolean> {
-    private static BraintreeGateway gateway = Application.gateway;
+    private final BraintreeGateway gateway = BraintreeGatewayFactory.fromConfigFile(new File("gateway.properties"));
 
     @Override
     public Boolean apply(PaySubscription msg) {
@@ -33,11 +33,6 @@ public class PaySubscriptionFunction extends FunctionInitializer implements Func
      * where the argument to echo is the JSON to be parsed.
      */
     public static void main(String...args) throws IOException {
-        File file = new File("gateway.properties");
-        if(file.exists())
-            gateway = BraintreeGatewayFactory.fromConfigFile(file);
-        else
-            gateway = BraintreeGatewayFactory.fromConfigMapping(System.getenv());
         PaySubscriptionFunction function = new PaySubscriptionFunction();
         function.run(args, (context)-> function.apply(context.get(PaySubscription.class)));
     }    

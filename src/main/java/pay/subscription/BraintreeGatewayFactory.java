@@ -1,20 +1,15 @@
 package pay.subscription;
 
 import com.braintreegateway.BraintreeGateway;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.io.*;
 import java.util.Map;
 import java.util.Properties;
 
 public class BraintreeGatewayFactory {
-	public static BraintreeGateway fromConfigMapping(Map<String, String> mapping) {
-		return new BraintreeGateway(
-				mapping.get("environment"),
-				mapping.get("merchantId"),
-				mapping.get("publicKey"),
-				mapping.get("privateKey")
-		);
-	}
+	private static final Logger logger = LoggerFactory.getLogger(BraintreeGatewayFactory.class);
 
 	public static BraintreeGateway fromConfigFile(File configFile) {
 		InputStream inputStream = null;
@@ -24,14 +19,14 @@ public class BraintreeGatewayFactory {
 			inputStream = new FileInputStream(configFile);
 			properties.load(inputStream);
 		} catch(IOException e) {
-			e.printStackTrace();
+			logger.error(e.getMessage(), e);
 		} finally {
 			try {
 				if(inputStream != null) {
 					inputStream.close();
 				}
 			} catch(IOException e) {
-				e.printStackTrace();
+				logger.error(e.getMessage(), e);
 			}
 		}
 
